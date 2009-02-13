@@ -28,6 +28,10 @@ module Authorization
   # * AuthorizationRulesReader#is_not,
   # * AuthorizationRulesReader#is_in,
   # * AuthorizationRulesReader#is_not_in
+  # * AuthorizationRulesReader#lt,
+  # * AuthorizationRulesReader#lte,
+  # * AuthorizationRulesReader#gt,
+  # * AuthorizationRulesReader#gte,
   #
   # And privilege definition methods
   # * PrivilegesReader#privilege,
@@ -266,7 +270,7 @@ module Authorization
         raise DSLError, "to only allowed in has_permission_on blocks" if @current_rule.nil?
         @current_rule.append_privileges(privs)
       end
-
+      
       # In a has_permission_on block, if_attribute specifies conditions
       # of dynamic parameters that have to be met for the user to meet the
       # privileges in this block.  Conditions are evaluated on the context
@@ -334,26 +338,26 @@ module Authorization
         @current_rule.append_attribute AttributeWithPermission.new(privilege,
             attr_or_hash, options[:context])
       end
-      
+            
       # In an if_attribute statement, is says that the value has to be
-      # met exactly by the if_attribute attribute.  For information on the block
+      # met exactly by the if_attribute attribute. For information on the block
       # argument, see if_attribute.
       def is (&block)
         [:is, block]
       end
-
+ 
       # The negation of is.
       def is_not (&block)
         [:is_not, block]
       end
-
+ 
       # In an if_attribute statement, contains says that the value has to be
       # part of the collection specified by the if_attribute attribute.
       # For information on the block argument, see if_attribute.
       def contains (&block)
         [:contains, block]
       end
-
+ 
       # The negation of contains.
       def does_not_contain (&block)
         [:does_not_contain, block]
@@ -365,13 +369,30 @@ module Authorization
       def is_in (&block)
         [:is_in, block]
       end
-
+ 
       # The negation of is_in.
       def is_not_in (&block)
         [:is_not_in, block]
       end
       
+      def lt (&block)
+        [:lt, block]
+      end
+      
+      def lte (&block)
+        [:lte, block]
+      end
+      
+      def gt (&block)
+        [:gt, block]
+      end
+      
+      def gte (&block)
+        [:gte, block]
+      end
+      
       private
+            
       def parse_attribute_conditions_hash! (hash)
         merge_hash = {}
         hash.each do |key, value|

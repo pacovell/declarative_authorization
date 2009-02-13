@@ -339,6 +339,14 @@ module Authorization
             evaluated.include?(attr_value)
           when :is_not_in
             !evaluated.include?(attr_value)
+          when :lt
+            attr_value && attr_value < evaluated
+          when :lte
+            attr_value && attr_value <= evaluated
+          when :gt
+            attr_value && attr_value > evaluated
+          when :gte
+            attr_value && attr_value <= evaluated            
           else
             raise AuthorizationError, "Unknown operator #{value[0]}"
           end
